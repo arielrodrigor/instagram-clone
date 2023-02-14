@@ -12,6 +12,8 @@ export const authOptions = {
     // THEME
     pages : {
         signIn: '/auth/signin',
-    }
+    },
+
+
 }
 export default NextAuth(authOptions)
