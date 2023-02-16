@@ -27,15 +27,15 @@ function Post({id, username, userImg, img, caption}) {
 
     React.useEffect(() => {
         setHasLiked(
-            likes.findIndex((like) => like.id === session.user.uid) !== -1
+            likes.findIndex((like) => like.id === session?.user?.uid) !== -1
         )
     }, [likes]);
     const likePost = async () => {
             if(hasLiked){
-                await deleteDoc(doc(db,'posts',id,'likes', session.user.uid));
+                await deleteDoc(doc(db,'posts',id,'likes', session?.user?.uid));
             }else{
                 console.log(session.user);
-                const docRef = await doc(db,'posts', id,'likes', session.user.uid);
+                const docRef = await doc(db,'posts', id,'likes', session?.user?.uid);
                 console.log(docRef);
                 const data = {
                     username: session.user.username,
@@ -71,7 +71,12 @@ function Post({id, username, userImg, img, caption}) {
             {session && (
                 <div className={'flex justify-between px-4 pt-4'}>
                     <div className={'flex space-x-4'}>
-                        <HeartIcon onClick={likePost}  className={'btn'}/>
+                        {hasLiked ? (
+                            <HeartIconFilled onClick={likePost} className={'btn text-red-500'}/>
+                        ) : (
+                            <HeartIcon onClick={likePost}  className={'btn'}/>
+
+                        )}
                         <ChatBubbleOvalLeftEllipsisIcon className={'btn'}/>
                         <PaperAirplaneIcon className={'btn'}/>
                     </div>
@@ -82,6 +87,9 @@ function Post({id, username, userImg, img, caption}) {
 
             {/*Caption*/}
             <p className={'p-5 truncate'}>
+                {likes.length > 0 && (
+                    <p className={'font-bold mb-1'}>{likes.length} likes</p>
+                )}
                 <span className={'font-bold mr-1'}>{username}</span>
                 {caption}
             </p>
